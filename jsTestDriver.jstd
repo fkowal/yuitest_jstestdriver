@@ -2,7 +2,8 @@ server: http://localhost:9876
 
 load:
 # Y.Test module dependencies copied from YUI Configurator http://yuilibrary.com/yui/configurator/
-  - http://yui.yahooapis.com/combo?3.5.1/build/yui-base/yui-base-min.js&3.5.1/build/oop/oop-min.js&3.5.1/build/event-custom-base/event-custom-base-min.js&3.5.1/build/event-base/event-base-min.js&3.5.1/build/event-simulate/event-simulate-min.js&3.5.1/build/event-custom-complex/event-custom-complex-min.js&3.5.1/build/substitute/substitute-min.js&3.5.1/build/json-stringify/json-stringify-min.js&3.5.1/build/test/test-min.js
+  - http://yui.yahooapis.com/combo?3.5.1/build/yui-base/yui-base-debug.js&3.5.1/build/oop/oop-debug.js&3.5.1/build/event-custom-base/event-custom-base-debug.js&3.5.1/build/event-base/event-base-debug.js&3.5.1/build/event-simulate/event-simulate-debug.js&3.5.1/build/event-custom-complex/event-custom-complex-debug.js&3.5.1/build/substitute/substitute-debug.js&3.5.1/build/json-stringify/json-stringify-debug.js&3.5.1/build/test/test-debug.js&3.5.1/build/yui-log/yui-log-debug.js&3.5.1/build/dump/dump-debug.js
   - jstestdriverAdapter.js
+  - sampleTestCase.js
 test:
-  - testExample.js
+  - exampleRunner.js

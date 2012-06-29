@@ -1,33 +1,37 @@
+/*global YUI */
+/**
+ * this adapter makes 3 things
+ * # converts Y.Test.Case to jsTestDriver TestCase
+ * # converts Y.*.AssertionErrors to extend the native Error,
+ * so that stackTrace will attached to the Error object
+ * this enabled jsTestDriver to display nice links links containing the failname
+ * and line number of the test that failed
+ * # jsTestDriver expects all assertErrors.name to be 'AssertError' then it marks
+ * tests as Failed in the result summary, else a failed test would be marked as Error
+ */
 YUI.add('jstestdriverAdapter', function(Y) {
+    if (Y.Lang.isUndefined(Y.config.win.jstestdriver)) {
+        return;
+    }
     Y.Test.Case = function(o) {
+        // override the Test.Case so it will be run by jsTestDriver runner
         TestCase(o.name, o);
     }
-    var Assert = Y.Test.Assert;
-    // Equality Assertions
-    Assert.areEqual = function(expected, actual, msg) { assertEquals(msg, expected, actual); }
-    Assert.areNotEqual = function(unexpected, actual, msg) { assertNotEquals(msg, unexpected, actual); }
-    // Sameness Assertions
-    Assert.areNotSame = function(unexpected, actual, msg) { assertNotSame(msg, unexpected, actual); }
-    Assert.areSame = function(expected, actual, msg) { assertSame(msg, expected, actual); }
-    // Special Value Assertions
-    Assert.isTrue = function(actual, msg) { assertTrue(msg, actual); }
-    Assert.isFalse = function(actual, msg) { assertFalse(msg, actual); }
-    Assert.isNaN = function(actual, msg) { assertNaN(msg, actual); }
-    Assert.isNotNaN = function(actual, msg) { assertNotNaN(msg, actual); }
-    Assert.isNotNull = function(actual, msg) { assertNotNull(msg, actual); }
-    Assert.isNotUndefined = function(actual, msg) { assertNotUndefined(msg, actual); }
-    Assert.isNull = function(actual, msg) { assertNull(msg, actual); }
-    Assert.isUndefined = function(actual, msg) { assertUndefined(msg, actual); }
-    // Data Type Assertions
-    Assert.isArray = function(actual, msg) { assertArray(msg, actual); }
-    Assert.isBoolean = function(actual, msg) { assertBoolean(msg, actual); }
-    Assert.isFunction = function(actual, msg) { assertFunction(msg, actual); }
-    Assert.isInstanceOf = function(expected, actual, message) { assertInstanceOf(message, expected, actual); }
-    Assert.isNumber = function(actual, msg) { assertNumber(msg, actual); }
-    Assert.isObject = function(actual, msg) { assertObject(msg, actual); }
-    Assert.isString = function(actual, msg) { assertString(msg, actual); }
-    Assert.isTypeOf = function(expected, actual, msg) { assertTypeOf(msg, expected, actual); }
-    Assert.throwsError = function(expectedError, method, msg) { assertException(msg, method, expectedError); }  // TODO verify
-    //Forced Failures
-    Assert.fail = function(msg) { fail(msg); }
-}, 'v0.1' ,{requires:['test']});
+
+    // jsTestDrivers expects Error.name to be 'AssertError' in order for the test to Fail
+    // other Error.name mark the test as Error
+    Y.Test.AssertionError = Error;
+    Y.Test.AssertionError.prototype.name = 'AssertError';//'AssertionError';
+    Y.Test.ComparisonFailure = Error;
+    Y.Test.ComparisonFailure.prototype.name = 'AssertError';//'ComparisionFailure';
+    Y.Test.UnexpectedValue = Error;
+    Y.Test.UnexpectedValue.prototype.name = 'AssertError';//'UnexpectedValue';
+    Y.Test.ShouldError = Error;
+    Y.Test.ShouldError.prototype.name = 'AssertError';//'ShouldError';
+    Y.Test.ShouldFail = Error;
+    Y.Test.ShouldFail.prototype.name = 'AssertError';//'ShouldFail';
+    Y.Test.UnexpectedError = Error;
+    Y.Test.UnexpectedError.prototype.name = 'AssertError';//'UnexpectedError';
+    Y.Test.Assert.Error = Error;
+    Y.Test.Assert.Error = 'AssertError';//'AssertionError';
+}, 'v0.2' ,{requires:['test']});
